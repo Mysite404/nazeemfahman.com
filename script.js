@@ -1,47 +1,94 @@
-// mobile menu
-const nav = document.querySelector(".nav");
-const burger = document.querySelector(".burger");
-burger.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
-  burger.setAttribute("aria-expanded", String(open));
-});
-nav.querySelectorAll("nav a").forEach(a => a.addEventListener("click", () => {
-  nav.classList.remove("open");
-  burger.setAttribute("aria-expanded", "false");
-}));
+const cursor = document.querySelector(".cursor");
+const dot = document.querySelector(".cursor-dot");
 
-// slow parallax drift on each frame's image
-const still = matchMedia("(prefers-reduced-motion:reduce)").matches;
-const frames = [...document.querySelectorAll(".frame,.stage")];
-function drift() {
-  frames.forEach(f => {
-    const r = f.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) return;
-    const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
-    f.querySelector(".img").style.transform = `translateY(${p * -6}%) scale(1.04)`;
+if (window.matchMedia("(pointer:fine)").matches) {
+  window.addEventListener("mousemove", (e) => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    dot.style.left = `${e.clientX}px`;
+    dot.style.top = `${e.clientY}px`;
+  });
+
+  document.querySelectorAll("a, button, .project, .service, .frame").forEach((el) => {
+    el.addEventListener("mouseenter", () => cursor.classList.add("active"));
+    el.addEventListener("mouseleave", () => cursor.classList.remove("active"));
   });
 }
-if (!still) {
-  addEventListener("scroll", () => requestAnimationFrame(drift), { passive: true });
-  addEventListener("resize", drift);
-  drift();
-}
 
-// captions and panels fade in as each frame arrives
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-}), { threshold: .15 });
-document.querySelectorAll(".cap,.card").forEach(el => { el.classList.add("rise"); io.observe(el); });
+const nav = document.querySelector(".nav");
 
-// contact form opens the email app
-const form = document.querySelector("#contactForm");
-const msg = document.querySelector("#formMessage");
-form.addEventListener("submit", e => {
-  e.preventDefault();
-  const v = n => form.elements[n].value.trim();
-  const subject = encodeURIComponent(v("project") ? `Project enquiry: ${v("project")}` : "Project enquiry");
-  const body = encodeURIComponent(`Name: ${v("name")}\nEmail: ${v("email")}\nProject: ${v("project")}\n\n${v("message")}`);
-  location.href = `mailto:nazeem@example.com?subject=${subject}&body=${body}`;
-  msg.textContent = "Opening your email app";
+window.addEventListener("scroll", () => {
+  nav.classList.toggle("scrolled", window.scrollY > 50);
+}, { passive: true });
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach((el, index) => {
+  el.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
+  revealObserver.observe(el);
 });
 
+document.querySelectorAll(".magnetic").forEach((button) => {
+  button.addEventListener("mousemove", (e) => {
+    if (!window.matchMedia("(pointer:fine)").matches) return;
+    const rect = button.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.16;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.16;
+    button.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  button.addEventListener("mouseleave", () => {
+    button.style.transform = "translate(0,0)";
+  });
+});
+
+const form = document.getElementById("contactForm");
+const message = document.getElementById("formMessage");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = form.elements.name.value.trim() || "there";
+  const email = form.elements.email.value.trim();
+  const project = form.elements.project.value.trim();
+  const body = form.elements.message.value.trim();
+
+  const subject = encodeURIComponent(`Project enquiry${project ? `: ${project}` : ""}`);
+  const mailBody = encodeURIComponent(
+    `Hi Nazeem,\n\nName: ${name}\nEmail: ${email}\nProject: ${project}\n\n${body}`
+  );
+
+  window.location.href = `mailto:nazeem@example.com?subject=${subject}&body=${mailBody}`;
+  message.textContent = "Opening your email app...";
+});
+
+const menuButton = document.querySelector(".menu-btn");
+const navLinks = document.querySelector(".nav-links");
+
+menuButton.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("mobile-open");
+  menuButton.setAttribute("aria-expanded", open);
+});
+
+navLinks.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => navLinks.classList.remove("mobile-open"));
+});
+
+const parallaxFrames = document.querySelectorAll(".frame");
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+  if (window.innerWidth > 800) {
+    parallaxFrames.forEach((frame, i) => {
+      const speed = [0.035, -0.025, 0.018, -0.015][i] || 0.02;
+      frame.style.translate = `0 ${y * speed}px`;
+    });
+  }
+}, { passive: true });
