@@ -9,7 +9,7 @@ const FILMS=[
   g:"radial-gradient(60% 70% at 55% 35%,#e8a37a 0,#8a2d45 45%,#2b0a17 100%)",img:"ASSETS/SA.gif",video:"ASSETS/teaserSA.mp4",wide:1},
  {t:"COMING SOON",cat:"COMING SOON",yr:"2025",d:"COMING SOON.",
   g:"linear-gradient(135deg,#d8d4cf,#4a4846 55%,#0e0e0e)",img:"",video:"",wide:1},
- {t:"COMING SOON",cat:"Broadcast",yr:"2025",d:"COMING SOON",
+ {t:"COMING SOON",cat:"COMING SOON",yr:"2025",d:"COMING SOON",
   g:"radial-gradient(70% 60% at 50% 40%,#1c3cff 0,#0b1252 55%,#02030f)",img:"",video:"",wide:1},
  {t:"COMING SOON",cat:"COMING SOON",yr:"2026",d:"COMING SOON",
   g:"radial-gradient(60% 70% at 45% 40%,#c71f5d 0,#5a0b34 50%,#12020b)",img:"",video:"",wide:1},
