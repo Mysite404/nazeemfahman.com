@@ -5,15 +5,15 @@
    Note: Boleh tukar wide atau duo
    */
 const FILMS=[
- {t:"Sementara Ada",cat:"Short film",yr:"2025",d:"Kisah seorang penghantar makanan, menemui harapan baharu menerusi kerja amal.",
+ {t:"Sementara Ada",cat:"Short film",yr:"2026",d:"Kisah seorang penghantar makanan, menemui harapan baharu menerusi kerja amal.",
   g:"radial-gradient(60% 70% at 55% 35%,#e8a37a 0,#8a2d45 45%,#2b0a17 100%)",img:"ASSETS/SA.gif",video:"ASSETS/teaserSA.mp4",wide:1},
- {t:"Silat Gayong",cat:"Short film",yr:"2025",d:"A quiet portrait of a young man caught between what he wants and what he owes.",
-  g:"linear-gradient(135deg,#d8d4cf,#4a4846 55%,#0e0e0e)",img:"ASSETS/SA.gif",video:"",wide:1},
- {t:"RTM1 Magazine",cat:"Broadcast",yr:"2025",d:"Behind-the-scenes storytelling for a national broadcast magazine programme.",
+ {t:"COMING SOON",cat:"COMING SOON",yr:"2025",d:"COMING SOON.",
+  g:"linear-gradient(135deg,#d8d4cf,#4a4846 55%,#0e0e0e)",img:"",video:"",wide:1},
+ {t:"COMING SOON",cat:"Broadcast",yr:"2025",d:"COMING SOON",
   g:"radial-gradient(70% 60% at 50% 40%,#1c3cff 0,#0b1252 55%,#02030f)",img:"",video:"",wide:1},
- {t:"Langkah Wanita di Litar",cat:"Documentary",yr:"2026",d:"Women on the racing circuit: the nerve, the engines and the fight for the grid.",
+ {t:"COMING SOON",cat:"COMING SOON",yr:"2026",d:"COMING SOON",
   g:"radial-gradient(60% 70% at 45% 40%,#c71f5d 0,#5a0b34 50%,#12020b)",img:"",video:"",wide:1},
- {t:"Cinematic Poster Work",cat:"Visual design",yr:"2026",d:"Key art and posters that carry the mood of a film before the first frame plays.",
+ {t:"COMING SOON",cat:"COMING SOON",yr:"2026",d:"COMING SOON",
   g:"radial-gradient(70% 70% at 50% 45%,#2b6d6d 0,#10393d 50%,#031114)",img:"",video:"",wide:1} 
 ];
 const $=s=>document.querySelector(s);
