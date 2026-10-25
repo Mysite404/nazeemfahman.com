@@ -1,261 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nazeem Fahman is a filmmaker, director and editor crafting visual stories through film, documentary, branded content and photography.">
-  <title>Nazeem Fahman | Filmmaker</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nazeem Fahman – Filmmaker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
+<div class="vig" aria-hidden="true"></div>
+<div class="lens top" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="lens bot" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="cur" id="cur" aria-hidden="true">Play</div>
 
-  <div class="noise"></div>
-  <div class="cursor"></div>
-  <div class="cursor-dot"></div>
+<nav>
+  <a href="#top" class="logo">Nazeem Fahman</a>
+  <ul><li><a href="#work">Work</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+</nav>
 
-  <header class="nav">
-    <a class="brand" href="#top" aria-label="Nazeem Fahman home">
-      <span class="brand-mark">NF<span>.</span></span>
-      <span class="brand-name">NAZEEM FAHMAN</span>
-    </a>
+<header class="hero" id="top">
+  <div class="leak"></div>
+  <div class="hud top"><span class="rec"><i></i>REC <span id="tc">00:00:00:00</span></span><span>Bangi, Selangor, Malaysia</span><span>Filmmaker / Director / Editor</span></div>
+  <div class="stack" id="stack" aria-label="Another pretty video. A story people feel.">
+   <div id="biggesttitleintheworld" class="lit" style="display: block !important; margin-bottom: 80px !important;">
+    <span class="l" style="display: block !important;">A story</span>
+    <span class="l b" style="display: block !important;">people feel.</span>
+</div>
 
-    <nav class="nav-links">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#services">Capabilities</a>
-      <a href="#contact">Contact</a>
-    </nav>
+  </div>
+  <p class="sub"><b>I’m Nazeem Fahman</b>, a filmmaker and visual storyteller. I make films and visuals about real people, emotions and the moments worth remembering.</p>
 
-    <a class="nav-cta magnetic" href="#contact">Start a project <span>↗</span></a>
-    <button class="menu-btn" aria-label="Open menu"><span></span><span></span></button>
-  </header>
+  
+</header>
 
-  <main id="top">
+<main>
+<section class="work" id="work">
+  <div class="sec-head"><h2>The work<br>so far.</h2><p>Documentaries, branded stories and visual experiments. Tap a film to open it.</p></div>
+  <div id="films"></div>
+</section>
 
-    <section class="hero">
-      <div class="hero-meta reveal">
-        <span>FILMMAKER / DIRECTOR / EDITOR</span>
-        <span>BASED IN MALAYSIA</span>
-      </div>
+<section class="about" id="about">
+  <div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div>
+    <p>I’m a filmmaker from Malaysia who sees every frame as a promise to the person watching.</p>
+    <p>I start with the people, understand the emotion, then build the visual language around it. <em>Directing, editing, shooting, designing</em> – I follow the idea from first spark to final cut.</p>
+    <a class="know glass" href="know-me.html" target="_blank" rel="noopener">Know Me Deeper</a>
+  </div>
+  <div class="cards">
+    <article class="glass card"><h3>Directing</h3><p>Visual direction, performance, pacing.</p></article>
+    <article class="glass card"><h3>Editing</h3><p>Rhythm, structure, sound and colour.</p></article>
+    <article class="glass card"><h3>Documentary</h3><p>Real people, real places.</p></article>
+    <article class="glass card"><h3>Branded video</h3><p>Stories that sell without shouting.</p></article>
+    <article class="glass card"><h3>Photography</h3><p>Stills with a cinematic eye.</p></article>
+    <article class="glass card"><h3>Visual design</h3><p>Posters, titles, identities.</p></article>
+  </div>
+</section>
+</main>
 
-      <div class="hero-collage">
-        <div class="frame frame-a media-placeholder" data-label="DOCUMENTARY">
-          <div class="fake-image image-01"></div>
-        </div>
-        <div class="frame frame-b media-placeholder" data-label="DIRECTING">
-          <div class="fake-image image-02"></div>
-        </div>
-        <div class="frame frame-c media-placeholder" data-label="BTS">
-          <div class="fake-image image-03"></div>
-        </div>
-        <div class="frame frame-d media-placeholder" data-label="EDITORIAL">
-          <div class="fake-image image-04"></div>
-        </div>
-      </div>
-
-      <div class="hero-title reveal">
-        <p class="eyebrow">PRAESTO PRODUCTIONS / 2026</p>
-        <h1>THIS ISN'T<br>JUST <em>CONTENT<span>.</span></em></h1>
-        <p class="hero-copy">I create films and visual stories built around people, emotion and the moments worth remembering.</p>
-        <a href="#work" class="circle-link magnetic"><span>EXPLORE<br>THE WORK</span><b>↓</b></a>
-      </div>
-
-      <div class="scroll-note"><span>SCROLL TO EXPLORE</span><i></i></div>
-    </section>
-
-    <section class="statement">
-      <div class="statement-line reveal">
-        <span>YOU DON'T NEED</span>
-        <strong>ANOTHER<br>PRETTY VIDEO<span>.</span></strong>
-      </div>
-      <div class="statement-line second reveal">
-        <span>YOU NEED</span>
-        <strong>A STORY<br>PEOPLE <em>FEEL.</em></strong>
-      </div>
-      <div class="orbit-word orbit-one">DIRECTOR · EDITOR · FILMMAKER ·</div>
-      <div class="orbit-word orbit-two">STORY · PEOPLE · EMOTION ·</div>
-    </section>
-
-    <section class="accent-break">
-      <p class="reveal">EVERY FRAME HAS A PURPOSE.</p>
-      <h2 class="reveal">LET'S MAKE<br>IT <span>MATTER.</span></h2>
-    </section>
-
-    <section class="intro" id="about">
-      <div class="section-label reveal">01 / ABOUT</div>
-      <div class="intro-content">
-        <div class="camera-window reveal">
-          <div class="camera-circle"></div>
-          <div class="camera-body">
-            <span class="camera-lens"></span>
-            <span class="camera-top"></span>
-          </div>
-          <div class="camera-text">DIRECT / SHOOT / EDIT</div>
-        </div>
-        <div class="intro-copy reveal">
-          <p class="eyebrow">WHO I AM</p>
-          <h2>MAKING VISUALS<br>THAT <span>STAY.</span></h2>
-          <p>I’m Nazeem Fahman, a film student and visual storyteller from Malaysia. I work across directing, editing, documentary, branded content, photography and post production.</p>
-          <p>My approach is simple. Start with the people, understand the emotion, then build the visual language around it.</p>
-          <div class="signature">NAZEEM FAHMAN<span>.</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="work" id="work">
-      <div class="section-head reveal">
-        <div>
-          <div class="section-label">02 / SELECTED WORK</div>
-          <h2>THE WORK<br><span>SO FAR.</span></h2>
-        </div>
-        <p>A selection of documentary, short film, television and visual work from my journey as a filmmaker.</p>
-      </div>
-
-      <div class="work-grid">
-        <article class="project project-large reveal">
-          <div class="project-image project-silat">
-            <span class="project-index">01</span>
-            <span class="project-type">DOCUMENTARY</span>
-            <div class="project-visual"><span>SILAT<br>GAYONG</span></div>
-          </div>
-          <div class="project-info">
-            <div><h3>Silat Gayong</h3><p>Documentary / Culture / Sport</p></div>
-            <span class="year">2026</span>
-          </div>
-          <p class="project-description">A documentary exploring Silat Gayong at Nyor Sebatang, from its movement and discipline to the challenges of keeping the tradition relevant.</p>
-        </article>
-
-        <article class="project reveal">
-          <div class="project-image project-harraz">
-            <span class="project-index">02</span>
-            <span class="project-type">SHORT FILM</span>
-            <div class="project-visual"><span>HARRAZ</span></div>
-          </div>
-          <div class="project-info">
-            <div><h3>Harraz</h3><p>Drama / Slice of Life</p></div>
-            <span class="year">FYP</span>
-          </div>
-          <p class="project-description">A young delivery rider faces financial pressure, family responsibility and the quiet weight of trying to keep going.</p>
-        </article>
-
-        <article class="project reveal">
-          <div class="project-image project-rtm">
-            <span class="project-index">03</span>
-            <span class="project-type">TELEVISION</span>
-            <div class="project-visual"><span>RTM1</span></div>
-          </div>
-          <div class="project-info">
-            <div><h3>RTM1 Magazine</h3><p>BTS / Content / Offline Edit</p></div>
-            <span class="year">2026</span>
-          </div>
-          <p class="project-description">Behind the scenes photography, footage loading, content creation and offline editing across magazine productions.</p>
-        </article>
-
-        <article class="project reveal">
-          <div class="project-image project-women">
-            <span class="project-index">04</span>
-            <span class="project-type">MOTION / EDIT</span>
-            <div class="project-visual"><span>LANGKAH<br>WANITA</span></div>
-          </div>
-          <div class="project-info">
-            <div><h3>Langkah Wanita di Litar</h3><p>Motorsport / Motion Graphics</p></div>
-            <span class="year">2026</span>
-          </div>
-          <p class="project-description">Visual development for a motorsport magazine segment featuring women racers, riders and drifters.</p>
-        </article>
-
-        <article class="project project-wide reveal">
-          <div class="project-image project-digital">
-            <span class="project-index">05</span>
-            <span class="project-type">DESIGN</span>
-            <div class="project-visual"><span>POSTER<br>DESIGN</span></div>
-          </div>
-          <div class="project-info">
-            <div><h3>Cinematic Poster Work</h3><p>Photoshop / Key Art / Visual Design</p></div>
-            <span class="year">ONGOING</span>
-          </div>
-          <p class="project-description">Film inspired poster design, image manipulation and visual development with a focus on cinematic composition.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="capabilities" id="services">
-      <div class="section-label reveal">03 / CAPABILITIES</div>
-      <div class="cap-title reveal">
-        <h2>FROM FIRST<br>IDEA TO <span>FINAL CUT.</span></h2>
-        <p>I can work across different stages of production, whether the project needs one pair of hands or a small creative team.</p>
-      </div>
-
-      <div class="service-list">
-        <div class="service reveal"><span>01</span><h3>DIRECTING</h3><p>Visual direction, performance, blocking and storytelling choices.</p><b>↗</b></div>
-        <div class="service reveal"><span>02</span><h3>EDITING</h3><p>Premiere Pro based editing, pacing, structure, sound and visual rhythm.</p><b>↗</b></div>
-        <div class="service reveal"><span>03</span><h3>DOCUMENTARY</h3><p>Interview driven storytelling, observational footage and cultural subjects.</p><b>↗</b></div>
-        <div class="service reveal"><span>04</span><h3>BRANDED VIDEO</h3><p>Product videos, social content and brand stories with a cinematic approach.</p><b>↗</b></div>
-        <div class="service reveal"><span>05</span><h3>PHOTOGRAPHY</h3><p>BTS photography, production stills and visual content for creative projects.</p><b>↗</b></div>
-        <div class="service reveal"><span>06</span><h3>VISUAL DESIGN</h3><p>Photoshop, cinematic posters, key art and motion graphic direction.</p><b>↗</b></div>
-      </div>
-    </section>
-
-    <section class="experience">
-      <div class="section-label reveal">04 / EXPERIENCE</div>
-      <div class="experience-wrap">
-        <div class="experience-main reveal">
-          <p class="eyebrow">CURRENTLY LEARNING / CURRENTLY MAKING</p>
-          <h2>STUDENT<br><span>FILMMAKER.</span></h2>
-          <p>Diploma Teknologi Kreatif dan Produksi Video<br>Politeknik METrO Tasek Gelugor</p>
-        </div>
-        <div class="experience-list">
-          <div class="exp-item reveal"><span>2026</span><strong>D’Ayu Pictures</strong><small>Production / Creative / Talent related work</small></div>
-          <div class="exp-item reveal"><span>2026</span><strong>RTM1</strong><small>BTS Photographer / Footage Loader / Content Creator / Offline Editor</small></div>
-          <div class="exp-item reveal"><span>2026</span><strong>Praesto Productions</strong><small>Student production collective / Film projects</small></div>
-          <div class="exp-item reveal"><span>SKILLS</span><strong>Creative + Technical</strong><small>Photoshop / Premiere Pro / Photography / HTML / CSS / JavaScript</small></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="numbers">
-      <div class="number reveal"><strong>01</strong><span>DOCUMENTARY<br>WIN</span></div>
-      <div class="number reveal"><strong>04</strong><span>CORE<br>CREW</span></div>
-      <div class="number reveal"><strong>03+</strong><span>MEDIA<br>PROJECTS</span></div>
-      <div class="number reveal"><strong>∞</strong><span>STORIES<br>TO TELL</span></div>
-    </section>
-
-    <section class="cta" id="contact">
-      <div class="cta-orbit"></div>
-      <div class="section-label reveal">05 / CONTACT</div>
-      <div class="cta-copy reveal">
-        <p class="eyebrow">GOT A STORY?</p>
-        <h2>LET'S MAKE<br>SOMETHING <span>REAL.</span></h2>
-        <p>Tell me what you are building, what you want people to feel and where you want the story to go.</p>
-      </div>
-
-      <form class="contact-form reveal" id="contactForm">
-        <label><span>NAME</span><input name="name" type="text" placeholder="Your name" required></label>
-        <label><span>EMAIL</span><input name="email" type="email" placeholder="you@email.com" required></label>
-        <label><span>PROJECT</span><input name="project" type="text" placeholder="What are we making?"></label>
-        <label><span>MESSAGE</span><textarea name="message" rows="4" placeholder="Tell me a little about it"></textarea></label>
-        <button class="submit magnetic" type="submit">SEND ENQUIRY <span>↗</span></button>
-        <p id="formMessage" class="form-message"></p>
-      </form>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="footer-top">
-      <span>NAZEEM FAHMAN<span class="pink">.</span></span>
-      <span>FILMMAKER / DIRECTOR / EDITOR</span>
-      <span>MALAYSIA / 2026</span>
+<section class="contact" id="contact">
+  <h2>Let’s make<br>something real.</h2>
+  <div class="row">
+    <p>Got a story that needs telling? Tell me what you want people to feel, and we’ll build the film around it.</p>
+    <div>
+      <button class="mail" id="mail" type="button">hello@nazeemfahman.com</button>
+      <div class="links"><a href="#">Instagram</a><a href="#">Vimeo</a><a href="#">YouTube</a></div>
     </div>
-    <div class="footer-bottom">
-      <p>Built around stories, not templates.</p>
-      <div><a href="mailto:nazeem@example.com">EMAIL</a><a href="#top">BACK TO TOP ↑</a></div>
-    </div>
-  </footer>
+  </div>
+</section>
+<footer><span>© 2026 Nazeem Fahman</span><span>Made in Malaysia</span></footer>
 
-  <script src="script.js"></script>
+<div class="proj" id="proj" role="dialog" aria-modal="true" aria-label="Film viewer">
+  <div class="bar t"></div><div class="bar b"></div>
+  <div class="screen"><div class="bg" id="pbg"></div><div><h3 id="pt"></h3><p id="pd"></p></div></div>
+  <div class="pinfo"><span id="pm"></span><button class="x" id="close" type="button">Close</button></div>
+</div>
+
+<script src="secure.js"></script>
+<script src="fx.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,94 +1,93 @@
-const cursor = document.querySelector(".cursor");
-const dot = document.querySelector(".cursor-dot");
-
-if (window.matchMedia("(pointer:fine)").matches) {
-  window.addEventListener("mousemove", (e) => {
-    cursor.style.left = `${e.clientX}px`;
-    cursor.style.top = `${e.clientY}px`;
-    dot.style.left = `${e.clientX}px`;
-    dot.style.top = `${e.clientY}px`;
-  });
-
-  document.querySelectorAll("a, button, .project, .service, .frame").forEach((el) => {
-    el.addEventListener("mouseenter", () => cursor.classList.add("active"));
-    el.addEventListener("mouseleave", () => cursor.classList.remove("active"));
-  });
+/* ============ EDIT YOUR FILMS HERE ============
+   img:   path to a still (e.g. "img/silat.jpg")  – optional
+   video: path to a looping mp4 preview           – optional
+   Without them, a cinematic gradient is used.   */
+const FILMS=[
+ {t:"Sementara Ada",cat:"Short film",yr:"2025",d:"Kisah seorang penghantar makanan, menemui harapan baharu menerusi kerja amal.",
+  g:"radial-gradient(60% 70% at 55% 35%,#e8a37a 0,#8a2d45 45%,#2b0a17 100%)",img:"ASSETS/SA.gif",video:"",wide:1},
+ {t:"Silat Gayong",cat:"Short film",yr:"2025",d:"A quiet portrait of a young man caught between what he wants and what he owes.",
+  g:"linear-gradient(135deg,#d8d4cf,#4a4846 55%,#0e0e0e)",img:"ASSETS/SA.gif",video:"",duo:1},
+ {t:"RTM1 Magazine",cat:"Broadcast",yr:"2025",d:"Behind-the-scenes storytelling for a national broadcast magazine programme.",
+  g:"radial-gradient(70% 60% at 50% 40%,#1c3cff 0,#0b1252 55%,#02030f)",img:"",video:"",duo:1},
+ {t:"Langkah Wanita di Litar",cat:"Documentary",yr:"2026",d:"Women on the racing circuit: the nerve, the engines and the fight for the grid.",
+  g:"radial-gradient(60% 70% at 45% 40%,#c71f5d 0,#5a0b34 50%,#12020b)",img:"",video:"",wide:1},
+ {t:"Cinematic Poster Work",cat:"Visual design",yr:"2026",d:"Key art and posters that carry the mood of a film before the first frame plays.",
+  g:"radial-gradient(70% 70% at 50% 45%,#2b6d6d 0,#10393d 50%,#031114)",img:"",video:"",wide:1}
+];
+const $=s=>document.querySelector(s);
+const media=f=>f.video?`<video src="${f.video}" muted loop autoplay playsinline></video>`:f.img?`<img src="${f.img}" alt="${f.t}">`:`<div class="pic" style="background:${f.g}"></div>`;
+const card=f=>`<button class="film" data-i="${FILMS.indexOf(f)}" type="button"><div class="frame">${media(f)}<div class="big">${f.t.replace(" ","<br>")}</div></div>
+<div class="cap"><div><b>${f.t}</b><em>${f.d}</em></div><span>${f.cat}</span><span>${f.yr}</span></div></button>`;
+let html="",i=0;
+while(i<FILMS.length){
+  if(FILMS[i].duo&&FILMS[i+1]&&FILMS[i+1].duo){html+=`<div class="duo">${card(FILMS[i])}${card(FILMS[i+1])}</div>`;i+=2}
+  else{html+=card(FILMS[i]);i++}
 }
+$("#films").innerHTML=html;
 
-const nav = document.querySelector(".nav");
+/* timecode */
+const tc=$("#tc"),t0=performance.now();
+setInterval(()=>{const s=(performance.now()-t0)/1000,p=n=>String(n|0).padStart(2,"0");
+  tc.textContent=`${p(s/3600)}:${p(s/60%60)}:${p(s%60)}:${p((s%1)*24)}`},42);
 
-window.addEventListener("scroll", () => {
-  nav.classList.toggle("scrolled", window.scrollY > 50);
-}, { passive: true });
+/* torchlight reveal */
+const hero=$("#top");let tx=50,ty=50,auto=true,t=0;
+const set=(x,y)=>{hero.style.setProperty("--mx",x+"px");hero.style.setProperty("--my",y+"px")};
+hero.addEventListener("pointermove",e=>{auto=false;const r=hero.getBoundingClientRect();set(e.clientX-r.left,e.clientY-r.top)});
+hero.addEventListener("pointerleave",()=>auto=true);
+(function loop(){ if(auto){t+=.008;const r=hero.getBoundingClientRect();
+  set(r.width*(.5+.32*Math.sin(t)),r.height*(.42+.12*Math.cos(t*1.7)))} requestAnimationFrame(loop)})();
 
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-      revealObserver.unobserve(entry.target);
+/* cursor */
+const cur=$("#cur");
+addEventListener("pointermove",e=>{cur.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+document.addEventListener("pointerover",e=>cur.classList.toggle("big",!!e.target.closest(".film")));
+
+/* projector */
+const proj=$("#proj");let last=null;
+function open(i){const f=FILMS[i];last=document.activeElement;
+  $("#pbg").style.background=f.img?`url(${f.img}) center/cover`:f.g;
+  $("#pt").textContent=f.t;$("#pd").textContent=f.d;$("#pm").textContent=f.cat+" · "+f.yr;
+  proj.classList.add("open");document.body.style.overflow="hidden";$("#close").focus()}
+function close(){proj.classList.remove("open");document.body.style.overflow="";last&&last.focus()}
+$("#films").addEventListener("click",e=>{const b=e.target.closest(".film");if(b)open(+b.dataset.i)});
+$("#close").onclick=close;addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+
+/* copy email */
+$("#mail").onclick=async e=>{const b=e.currentTarget,o=b.textContent;
+  try{await navigator.clipboard.writeText(o)}catch(_){}
+  b.textContent="Copied. Talk soon.";setTimeout(()=>b.textContent=o,1800);
+  location.href="mailto:"+o};
+
+/* Hilangkan blur bila di bawah, munculkan bila skrol naik */
+const botLens = document.querySelector(".lens.bot");
+if (botLens) {
+  // Tambah animasi pudar supaya nampak smooth
+  botLens.style.transition = "opacity 0.4s ease";
+  
+  let lastScroll = window.scrollY;
+  
+  window.addEventListener("scroll", () => {
+    let currentScroll = window.scrollY;
+    
+    // Cari ketinggian penuh dokumen (gunakan cara yang paling tepat untuk mobile & desktop)
+    let docHeight = Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    );
+    let maxScroll = docHeight - window.innerHeight;
+    
+    // 1. Jika pengguna skrol sampai ke paling bawah (toleransi 10px untuk bounce)
+    if (currentScroll >= maxScroll - 10) {
+      botLens.style.opacity = "0";
+    } 
+    // 2. Jika pengguna mula skrol NAIK ATAS
+    else if (currentScroll < lastScroll) {
+      botLens.style.opacity = "1";
     }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll(".reveal").forEach((el, index) => {
-  el.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
-  revealObserver.observe(el);
-});
-
-document.querySelectorAll(".magnetic").forEach((button) => {
-  button.addEventListener("mousemove", (e) => {
-    if (!window.matchMedia("(pointer:fine)").matches) return;
-    const rect = button.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.16;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.16;
-    button.style.transform = `translate(${x}px, ${y}px)`;
-  });
-
-  button.addEventListener("mouseleave", () => {
-    button.style.transform = "translate(0,0)";
-  });
-});
-
-const form = document.getElementById("contactForm");
-const message = document.getElementById("formMessage");
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const name = form.elements.name.value.trim() || "there";
-  const email = form.elements.email.value.trim();
-  const project = form.elements.project.value.trim();
-  const body = form.elements.message.value.trim();
-
-  const subject = encodeURIComponent(`Project enquiry${project ? `: ${project}` : ""}`);
-  const mailBody = encodeURIComponent(
-    `Hi Nazeem,\n\nName: ${name}\nEmail: ${email}\nProject: ${project}\n\n${body}`
-  );
-
-  window.location.href = `mailto:nazeem@example.com?subject=${subject}&body=${mailBody}`;
-  message.textContent = "Opening your email app...";
-});
-
-const menuButton = document.querySelector(".menu-btn");
-const navLinks = document.querySelector(".nav-links");
-
-menuButton.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("mobile-open");
-  menuButton.setAttribute("aria-expanded", open);
-});
-
-navLinks.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => navLinks.classList.remove("mobile-open"));
-});
-
-const parallaxFrames = document.querySelectorAll(".frame");
-
-window.addEventListener("scroll", () => {
-  const y = window.scrollY;
-  if (window.innerWidth > 800) {
-    parallaxFrames.forEach((frame, i) => {
-      const speed = [0.035, -0.025, 0.018, -0.015][i] || 0.02;
-      frame.style.translate = `0 ${y * speed}px`;
-    });
-  }
-}, { passive: true });
+    
+    // Simpan nilai skrol terkini
+    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+  }, { passive: true });
+}
