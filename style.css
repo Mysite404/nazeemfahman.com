@@ -17,13 +17,13 @@ a{color:inherit;text-decoration:none}
   animation:grain .6s steps(6) infinite}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-5%,-2%)}80%{transform:translate(4%,4%)}100%{transform:translate(0,0)}}
 
-/* cursor - Effect pink telah dibuang */
+/* cursor */
 .cur{display:none !important;}
 
 /* nav */
 nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;
   padding:calc(18px + env(safe-area-inset-top,0px)) 4vw 18px;mix-blend-mode:difference}
-nav .logo{font-weight:800;letter-spacing:-.02em;font-size:3vh}
+nav .logo{font-weight:800;letter-spacing:-.02em;font-size:2.5vh}
 nav ul{display:flex;gap:28px;list-style:none;font-size:14px}
 nav a:hover{color:var(--fg)}
 
@@ -40,7 +40,7 @@ nav a:hover{color:var(--fg)}
 .hud.top{top:84px}.hud.bot{bottom:28px}
 
 .rec{display:inline-flex;align-items:center;gap:8px;color:var(--fg)}
-.rec i{width:9px;height:9px;border-radius:50%;background:#ff0000;animation:blink 1.2s steps(2) infinite} /* Ditukar dari pink ke merah amaran biasa */
+.rec i{width:9px;height:9px;border-radius:50%;background:#ff0000;animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
 .stack{position:relative;font-weight:800;font-size:clamp(46px,11.5vw,190px);line-height:.88;letter-spacing:-.045em;user-select:none}
 .stack .l{display:block;white-space:nowrap}
@@ -55,7 +55,7 @@ nav a:hover{color:var(--fg)}
   display: block;        
 }
 
-/* work – full-bleed frames, quiet captions */
+/* work */
 .work{padding:14vh 0 6vh}
 .sec-head{padding:0 4vw 5vh;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
 h2{font-weight:800;font-size:clamp(38px,7vw,110px);line-height:.92;letter-spacing:-.04em}
@@ -65,9 +65,7 @@ h2{font-weight:800;font-size:clamp(38px,7vw,110px);line-height:.92;letter-spacin
 .frame .pic{position:absolute;inset:-4%;background-size:cover;background-position:center;transition:transform 1.2s cubic-bezier(.2,.7,.2,1),filter .4s}
 .frame .pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.55))}
 .frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.frame .big{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:800;font-size:clamp(34px,8vw,140px);line-height:.88;letter-spacing:-.045em;text-shadow:0 0 40px rgba(0,0,0,.45);transition:letter-spacing .6s,text-shadow .3s}
 .film:hover .pic{transform:scale(1.06);filter:saturate(1.25)}
-.film:hover .big{letter-spacing:-.02em;text-shadow:0 0 40px rgba(0,0,0,.65)}
 .cap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;padding:14px 4vw 5vh;font-size:14px}
 .cap b{font-weight:500}.cap span{color:var(--dim)}.cap span:last-child{text-align:right}
 .cap em{font-style:normal;color:var(--dim);display:block;font-size:13px;max-width:50ch;margin-top:2px}
@@ -84,7 +82,7 @@ h2{font-weight:800;font-size:clamp(38px,7vw,110px);line-height:.92;letter-spacin
 .services li:hover{padding-left:18px;color:var(--fg)}
 .services li:last-child{border-bottom:1px solid #1e1e1e}
 
-/* contact - Garisan pink dibuang menjadi transparent */
+/* contact */
 .contact{padding:16vh 4vw 8vh;background:var(--fg);color:#000}
 .contact h2{font-size:clamp(52px,13vw,220px);line-height:.85}
 .contact .row{margin-top:8vh;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;align-items:end}
@@ -115,6 +113,7 @@ footer{display:flex;justify-content:space-between;padding:22px 4vw;font-size:13p
   .duo{grid-template-columns:1fr}.about{grid-template-columns:1fr}
   .frame{aspect-ratio:4/5}.cap{grid-template-columns:1fr 1fr}.cap>div{grid-column:1/-1}
   .stack .l{white-space:normal}
+  .hero { justify-content: flex-end; padding-bottom: 12vh; }
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 
@@ -123,7 +122,7 @@ footer{display:flex;justify-content:space-between;padding:22px 4vw;font-size:13p
 .protect input,.protect textarea{-webkit-user-select:text;user-select:text}
 .protect img,.protect video{-webkit-user-drag:none;user-drag:none;pointer-events:none}
 
-/* ===== lens distortion: blurred top/bottom edges, fixed to the viewport ===== */
+/* ===== lens distortion ===== */
 .lens{position:fixed;left:0;right:0;height:50vh;z-index:50;pointer-events:none;--d:to bottom;--o:-5px}
 .lens.top{top:0}
 .lens.bot{bottom:0;--d:to top;--o:5px}
@@ -148,11 +147,6 @@ footer{display:flex;justify-content:space-between;padding:22px 4vw;font-size:13p
 .glass:hover::before{opacity:1}
 .about{position:relative;overflow:hidden}
 .about>div:not(.orbs){position:relative;z-index:1}
-.orbs i{position:absolute;border-radius:50%;filter:blur(50px);opacity:.85;animation:orb 16s ease-in-out infinite alternate}
-.orbs i:nth-child(1){width:34vw;height:34vw;background:#2a3cff;right:4%;top:6%} /* Warna ditukar dari pink ke biru */
-.orbs i:nth-child(2){width:28vw;height:28vw;background:#2a3cff;right:28%;bottom:2%;animation-delay:-5s}
-.orbs i:nth-child(3){width:20vw;height:20vw;background:#ff9a3c;right:-3%;bottom:10%;animation-delay:-9s;opacity:.55}
-@keyframes orb{to{transform:translate(-8vw,6vh) scale(1.2)}}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .card{padding:24px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between}
 .card h3{font-size:clamp(20px,2vw,28px);font-weight:500;letter-spacing:-.02em}
@@ -163,7 +157,7 @@ footer{display:flex;justify-content:space-between;padding:22px 4vw;font-size:13p
 /* ===== know-me page ===== */
 .kh{padding:22vh 4vw 6vh}
 .kh h1{font-weight:800;font-size:clamp(46px,11vw,180px);line-height:.88;letter-spacing:-.045em}
-.kh h1 span{color:var(--fg);text-shadow:-3px 0 var(--cyan)}
+.kh h1 span{color:var(--fg);} /* FIX: text-shadow cyan removed here */
 .kh p{margin-top:4vh;max-width:44ch;color:#b9b5ad;font-size:clamp(15px,1.3vw,18px)}
 .tabs{position:sticky;top:calc(62px + env(safe-area-inset-top,0px));z-index:55;display:flex;gap:10px;padding:10px 4vw}
 .tab{font:inherit;font-size:13px;padding:9px 18px;cursor:pointer;border-radius:99px}
@@ -181,3 +175,37 @@ footer{display:flex;justify-content:space-between;padding:22px 4vw;font-size:13p
 .kfoot a:hover{color:var(--fg)}
 [hidden]{display:none!important}
 @media (max-width:780px){.row{grid-template-columns:1fr;gap:20px}.cards{grid-template-columns:1fr}}
+
+/* ============ BACKGROUND PLACEHOLDER ============ */
+.bg-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.5;
+}
+
+.hero > *:not(.bg-media), .about > *:not(.bg-media) {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-media img, .bg-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(var(--blur, 0px));
+  transform: scale(1.05); 
+}
+
+/* ============ FIX UNTUK FONT TAHUN (KNOW-MORE) ============ */
+.yr .num {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(80px, 17vw, 280px);
+  line-height: .8;
+  letter-spacing: -.05em;
+  color: rgba(255, 255, 255, 0.06); 
+  -webkit-text-stroke: 0; 
+  margin-bottom: 4vh;
+}
