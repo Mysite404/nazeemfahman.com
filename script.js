@@ -18,8 +18,11 @@ const FILMS=[
 ];
 const $=s=>document.querySelector(s);
 const media=f=>f.video?`<video src="${f.video}" muted loop autoplay playsinline></video>`:f.img?`<img src="${f.img}" alt="${f.t}">`:`<div class="pic" style="background:${f.g}"></div>`;
-const card=f=>`<button class="film" data-i="${FILMS.indexOf(f)}" type="button"><div class="frame">${media(f)}<div class="big">${f.t.replace(" ","<br>")}</div></div>
+
+/* FIX: Teks besar di tengah gambar dibuang, hanya media dipaparkan */
+const card=f=>`<button class="film" data-i="${FILMS.indexOf(f)}" type="button"><div class="frame">${media(f)}</div>
 <div class="cap"><div><b>${f.t}</b><em>${f.d}</em></div><span>${f.cat}</span><span>${f.yr}</span></div></button>`;
+
 let html="",i=0;
 while(i<FILMS.length){
   if(FILMS[i].duo&&FILMS[i+1]&&FILMS[i+1].duo){html+=`<div class="duo">${card(FILMS[i])}${card(FILMS[i+1])}</div>`;i+=2}
@@ -30,66 +33,83 @@ $("#films").innerHTML=html;
 /* timecode */
 const tc=$("#tc"),t0=performance.now();
 setInterval(()=>{const s=(performance.now()-t0)/1000,p=n=>String(n|0).padStart(2,"0");
-  tc.textContent=`${p(s/3600)}:${p(s/60%60)}:${p(s%60)}:${p((s%1)*24)}`},42);
+  if(tc) tc.textContent=`${p(s/3600)}:${p(s/60%60)}:${p(s%60)}:${p((s%1)*24)}`},42);
 
 /* torchlight reveal */
 const hero=$("#top");let tx=50,ty=50,auto=true,t=0;
 const set=(x,y)=>{hero.style.setProperty("--mx",x+"px");hero.style.setProperty("--my",y+"px")};
-hero.addEventListener("pointermove",e=>{auto=false;const r=hero.getBoundingClientRect();set(e.clientX-r.left,e.clientY-r.top)});
-hero.addEventListener("pointerleave",()=>auto=true);
-(function loop(){ if(auto){t+=.008;const r=hero.getBoundingClientRect();
-  set(r.width*(.5+.32*Math.sin(t)),r.height*(.42+.12*Math.cos(t*1.7)))} requestAnimationFrame(loop)})();
+if(hero) {
+  hero.addEventListener("pointermove",e=>{auto=false;const r=hero.getBoundingClientRect();set(e.clientX-r.left,e.clientY-r.top)});
+  hero.addEventListener("pointerleave",()=>auto=true);
+  (function loop(){ if(auto){t+=.008;const r=hero.getBoundingClientRect();
+    set(r.width*(.5+.32*Math.sin(t)),r.height*(.42+.12*Math.cos(t*1.7)))} requestAnimationFrame(loop)})();
+}
 
 /* cursor */
 const cur=$("#cur");
-addEventListener("pointermove",e=>{cur.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
-document.addEventListener("pointerover",e=>cur.classList.toggle("big",!!e.target.closest(".film")));
+if(cur) {
+  addEventListener("pointermove",e=>{cur.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+  document.addEventListener("pointerover",e=>cur.classList.toggle("big",!!e.target.closest(".film")));
+}
 
 /* projector */
 const proj=$("#proj");let last=null;
-function open(i){const f=FILMS[i];last=document.activeElement;
-  $("#pbg").style.background=f.img?`url(${f.img}) center/cover`:f.g;
+function open(i){
+  const f=FILMS[i];
+  last=document.activeElement;
+  
+  const pbg = $("#pbg");
+  // Render video without controls and muted for seamless background autoplay
+  if (f.video) {
+    pbg.innerHTML = `<video src="${f.video}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0; z-index:1;"></video>`;
+    pbg.style.background = "#000"; 
+  } else {
+    pbg.innerHTML = "";
+    pbg.style.background = f.img ? `url(${f.img}) center/cover` : f.g;
+  }
+
   $("#pt").textContent=f.t;$("#pd").textContent=f.d;$("#pm").textContent=f.cat+" · "+f.yr;
-  proj.classList.add("open");document.body.style.overflow="hidden";$("#close").focus()}
-function close(){proj.classList.remove("open");document.body.style.overflow="";last&&last.focus()}
-$("#films").addEventListener("click",e=>{const b=e.target.closest(".film");if(b)open(+b.dataset.i)});
-$("#close").onclick=close;addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+  proj.classList.add("open");document.body.style.overflow="hidden";$("#close").focus();
+}
+
+function close(){
+  proj.classList.remove("open");
+  document.body.style.overflow="";
+  // Clear HTML to stop video automatically when closed
+  $("#pbg").innerHTML = ""; 
+  last&&last.focus();
+}
+
+if($("#films")) $("#films").addEventListener("click",e=>{const b=e.target.closest(".film");if(b)open(+b.dataset.i)});
+if($("#close")) $("#close").onclick=close;
+addEventListener("keydown",e=>{if(e.key==="Escape")close()});
 
 /* copy email */
-$("#mail").onclick=async e=>{const b=e.currentTarget,o=b.textContent;
-  try{await navigator.clipboard.writeText(o)}catch(_){}
-  b.textContent="Copied. Talk soon.";setTimeout(()=>b.textContent=o,1800);
-  location.href="mailto:"+o};
+if($("#mail")) {
+  $("#mail").onclick=async e=>{const b=e.currentTarget,o=b.textContent;
+    try{await navigator.clipboard.writeText(o)}catch(_){}
+    b.textContent="Copied. Talk soon.";setTimeout(()=>b.textContent=o,1800);
+    location.href="mailto:"+o};
+}
 
 /* Hilangkan blur bila di bawah, munculkan bila skrol naik */
 const botLens = document.querySelector(".lens.bot");
 if (botLens) {
-  // Tambah animasi pudar supaya nampak smooth
   botLens.style.transition = "opacity 0.4s ease";
-  
   let lastScroll = window.scrollY;
-  
   window.addEventListener("scroll", () => {
     let currentScroll = window.scrollY;
-    
-    // Cari ketinggian penuh dokumen (gunakan cara yang paling tepat untuk mobile & desktop)
     let docHeight = Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     );
     let maxScroll = docHeight - window.innerHeight;
-    
-    // 1. Jika pengguna skrol sampai ke paling bawah (toleransi 10px untuk bounce)
     if (currentScroll >= maxScroll - 10) {
       botLens.style.opacity = "0";
-    } 
-    // 2. Jika pengguna mula skrol NAIK ATAS
-    else if (currentScroll < lastScroll) {
+    } else if (currentScroll < lastScroll) {
       botLens.style.opacity = "1";
     }
-    
-    // Simpan nilai skrol terkini
     lastScroll = currentScroll <= 0 ? 0 : currentScroll;
   }, { passive: true });
 }

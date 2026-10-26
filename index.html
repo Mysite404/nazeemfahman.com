@@ -21,18 +21,25 @@
 </nav>
 
 <header class="hero" id="top">
+  <!-- PLACEHOLDER BACKGROUND MEDIA -->
+  <!-- Letak 0px untuk disable blur. Tukar tag <img> atau <video> di dalam -->
+  <div class="bg-media" style="--blur: 0px;">
+	<video src="ASSETS/HERO.mp4" autoplay loop muted playsinline></video>
+    <!-- Contoh gambar: <img src="hero-bg.jpg" alt=""> -->
+    <!-- Contoh video: <video src="bg-hero.mp4" autoplay loop muted playsinline></video> -->
+  </div>
+
   <div class="leak"></div>
-  <div class="hud top"><span class="rec"><i></i>REC <span id="tc">00:00:00:00</span></span><span>Bangi, Selangor, Malaysia</span><span>Filmmaker / Director / Editor</span></div>
+  
   <div class="stack" id="stack" aria-label="Another pretty video. A story people feel.">
-   <div id="biggesttitleintheworld" class="lit" style="display: block !important; margin-bottom: 80px !important;">
+   <!-- FIX: margin-bottom ditukar dari 80px kepada 24px supaya teks bawah naik rapat sikit -->
+   <div id="biggesttitleintheworld" class="lit" style="display: block !important; margin-bottom: 24px !important;">
     <span class="l" style="display: block !important;">A story</span>
     <span class="l b" style="display: block !important;">people feel.</span>
 </div>
 
   </div>
   <p class="sub"><b>I’m Nazeem Fahman</b>, a filmmaker and visual storyteller. I make films and visuals about real people, emotions and the moments worth remembering.</p>
-
-  
 </header>
 
 <main>
@@ -42,7 +49,11 @@
 </section>
 
 <section class="about" id="about">
-  <div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+  <!-- PLACEHOLDER BACKGROUND MEDIA -->
+  <div class="bg-media" style="--blur: 12px;">
+    <!-- Contoh: <img src="about-bg.jpg" alt=""> -->
+  </div>
+
   <div>
     <p>I’m a film director from Malaysia who sees every frame as a promise to the person watching.</p>
     <p>Nazeem Fahman is an award-winning director dedicated to compelling storytelling and visual innovation. He leads his own end-to-end creative process, handling every aspect of production from conceptualization to the final edit.</p>

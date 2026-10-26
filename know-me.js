@@ -28,3 +28,27 @@ function show(k){
 }
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>show(b.dataset.v));
 show(location.hash==="#certs"?"certs":"photos");
+
+/* FIX: Hilangkan blur bila di bawah, munculkan bila skrol naik (Untuk Know-Me page) */
+const botLens = document.querySelector(".lens.bot");
+if (botLens) {
+  botLens.style.transition = "opacity 0.4s ease";
+  let lastScroll = window.scrollY;
+  window.addEventListener("scroll", () => {
+    let currentScroll = window.scrollY;
+    let docHeight = Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    );
+    let maxScroll = docHeight - window.innerHeight;
+    
+    // Toleransi 10px supaya tak tersangkut pada peranti mobile
+    if (currentScroll >= maxScroll - 10) {
+      botLens.style.opacity = "0";
+    } else if (currentScroll < lastScroll) {
+      botLens.style.opacity = "1";
+    }
+    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+  }, { passive: true });
+}
