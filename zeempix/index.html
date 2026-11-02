@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZEEMPIX ENTERPRISE – Admin</title>
+<style>
+:root{--bg:#fff;--fg:#0a0a0a;--card:#f4f4f4;--line:#e0e0e0;--mute:#6b6b6b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f5f5f5;--card:#141414;--line:#2a2a2a;--mute:#9a9a9a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--fg:#f5f5f5;--card:#141414;--line:#2a2a2a;--mute:#9a9a9a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 60px}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;letter-spacing:.18em;font-size:.8rem}
+.tg{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit;font-size:.75rem;letter-spacing:.05em}
+.hero{text-align:center;padding:72px 0 40px}
+.hero small{color:var(--mute);letter-spacing:.3em;font-size:.72rem}
+h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-spacing:-.02em}
+.hero p{color:var(--mute);margin:0}
+.nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:34px}
+.btn{background:var(--fg);color:var(--bg);border:0;border-radius:22px;padding:22px 16px;font:inherit;font-weight:600;font-size:1rem;cursor:pointer;transition:transform .2s,opacity .2s}
+.btn:hover{transform:translateY(-3px);opacity:.88}
+.btn.alt{background:var(--card);color:var(--fg);border:1px solid var(--line)}
+#cal{display:none;margin-top:40px;animation:in .5s ease}
+#cal.show{display:block}
+.months{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+.m{flex:0 0 auto;border:1px solid transparent;background:var(--c);color:#111;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-size:.85rem;transition:.25s}
+.m:hover{transform:translateY(-2px)}
+.m.on{border-color:var(--fg);box-shadow:0 0 0 2px var(--fg);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:18px}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;cursor:pointer;opacity:0;transform:translateY(14px);animation:in .5s ease forwards;transition:border-color .2s,transform .2s}
+.ev:hover{border-color:var(--fg)}
+.ev b{display:block;font-size:1.8rem}
+.ev span{color:var(--mute);font-size:.9rem;line-height:1.4;display:block;margin-top:6px}
+.empty{color:var(--mute);padding:30px;text-align:center;grid-column:1/-1}
+#det{display:none;margin-top:18px;border:1px solid var(--fg);border-radius:22px;padding:24px}
+#det.show{display:block;animation:in .45s ease}
+#det h3{margin:0 0 4px;font-size:1.25rem}
+#det em{color:var(--mute);font-style:normal;font-size:.85rem}
+#typ{margin:14px 0 0;line-height:1.65;min-height:3em}
+#typ::after{content:"▍";animation:bl 1s infinite}
+@keyframes in{to{opacity:1;transform:none}from{opacity:0;transform:translateY(14px)}}
+@keyframes bl{50%{opacity:0}}
+.ft{text-align:center;color:var(--mute);font-size:.72rem;margin-top:60px;letter-spacing:.15em}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><span>ZEEMPIX ENTERPRISE</span><button class="tg" id="tg">◐ Tema</button></div>
+ <section class="hero">
+  <small>ADMIN PANEL · MEDIA KETENTERAAN</small>
+  <h1>Welcome to Zeempix Managements</h1>
+  <div class="nav">
+   <button class="btn" id="bCal">Calendar</button>
+   <button class="btn alt" data-k="socmed">SocMed</button>
+   <button class="btn alt" data-k="bmc">BMC</button>
+   <button class="btn alt" data-k="paper">PaperWork</button>
+  </div>
+ </section>
+ <section id="cal">
+  <div class="months" id="months"></div>
+  <div class="grid" id="grid"></div>
+  <div id="det"><h3 id="dt"></h3><em id="dm"></em><p id="typ"></p></div>
+ </section>
+ <div class="ft">© ZEEMPIX ENTERPRISE</div>
+</div>
+<script>
+// === Tukar link di sini ===
+const LINKS={socmed:"https://www.instagram.com/",bmc:"https://www.buymeacoffee.com/",paper:"https://drive.google.com/"};
+const MN=["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
+const T={A:"Angkatan Tentera Malaysia",P:"Polis Diraja Malaysia",G:"Agensi Awam & Keselamatan"};
+const E=[
+[0,1,"Unit Tindakan Khas (UTK)","P"],[1,1,"Pasukan Gerakan Udara (PGU)","P"],
+[2,1,"Tentera Darat Malaysia (TDM) & Rejimen Askar Melayu Diraja (RAMD)","A"],
+[2,11,"Pasukan Udara Tentera Darat (PUTD)","A"],[2,24,"Hari Pertahanan Awam (APM)","G"],
+[3,1,"Pasukan Khas Udara (PASKAU)","A"],[3,16,"Kor Agama Angkatan Tentera (KAGAT)","A"],
+[3,22,"Rejimen Askar Jurutera Diraja (RAJD)","A"],[3,27,"Tentera Laut Diraja Malaysia (TLDM)","A"],
+[4,1,"Kor Perkhidmatan Am (KPA)","A"],[4,4,"Hari Anggota Bomba","G"],[4,11,"Kor Kesihatan Diraja (KKD)","A"],
+[5,1,"Tentera Udara Diraja Malaysia (TUDM) & Rejimen Askar Wataniah (AW)","A"],
+[7,1,"Grup Gerak Khas (GGK)","A"],[7,15,"Rejimen Artileri Diraja (RAD)","A"],
+[8,1,"Kor Armor Diraja (KAD) & Pasukan Polis Marin (PPM)","A"],
+[8,16,"Angkatan Tentera Malaysia (ATM) & Rejimen Renjer Diraja (RRD)","A"],
+[9,1,"Pasukan Khas Laut (PASKAL) & Hari SPRM","A"],[9,10,"10 Briged Para","A"],
+[9,23,"Komando 69 (VAT 69)","P"],[10,7,"Kor Risik Diraja (KRD)","A"],
+[10,11,"Hari Penjara Malaysia","G"],[10,12,"Kor Polis Tentera Diraja (KPTD)","A"],
+[10,15,"Rejimen Semboyan Diraja (RSD)","A"],[11,5,"Pasukan Simpanan Persekutuan (FRU)","P"]];
+const $=id=>document.getElementById(id);let cur=new Date().getMonth(),tm;
+document.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>window.open(LINKS[b.dataset.k],"_blank","noopener"));
+$("bCal").onclick=()=>{$("cal").classList.toggle("show");if($("cal").classList.contains("show"))setTimeout(()=>$("cal").scrollIntoView({behavior:"smooth"}),50)};
+MN.forEach((n,i)=>{const b=document.createElement("button");b.className="m";b.textContent=n;b.style.setProperty("--c","hsl("+(i*30)+" 75% 85%)");b.onclick=()=>show(i);$("months").appendChild(b)});
+function show(m){
+ cur=m;clearInterval(tm);$("det").classList.remove("show");
+ [...$("months").children].forEach((b,i)=>b.classList.toggle("on",i===m));
+ const g=$("grid");g.innerHTML="";
+ const ev=E.filter(e=>e[0]===m);
+ if(!ev.length){g.innerHTML='<div class="empty">Tiada acara bulan ini.</div>';return}
+ ev.forEach((e,i)=>{const c=document.createElement("div");c.className="ev";c.style.animationDelay=i*90+"ms";
+  c.innerHTML="<b>"+e[1]+" "+MN[m].slice(0,3)+"</b><span></span>";c.lastChild.textContent=e[2];
+  c.onclick=()=>detail(e);g.appendChild(c)});
+}
+function detail(e){
+ $("dt").textContent=e[2];$("dm").textContent=e[1]+" "+MN[e[0]]+" · "+T[e[3]];
+ const txt="Tarikh "+e[1]+" "+MN[e[0]]+" diraikan sebagai hari ulang tahun penubuhan / sambutan "+e[2]+". Cabang: "+T[e[3]]+".";
+ const d=$("det");d.classList.remove("show");void d.offsetWidth;d.classList.add("show");
+ const t=$("typ");t.textContent="";clearInterval(tm);let i=0;
+ const s=Math.ceil(txt.length/25);tm=setInterval(()=>{i+=s;t.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(tm)},20);
+ setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"nearest"}),60);
+}
+show(cur);
+$("tg").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
+</script>
+</body>
+</html>
