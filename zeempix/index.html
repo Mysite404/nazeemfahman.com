@@ -12,7 +12,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
 .wrap{max-width:880px;margin:0 auto;padding:28px 20px 60px}
-.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;letter-spacing:.18em;font-size:.8rem}
+.top{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;font-weight:700;letter-spacing:.18em;font-size:.8rem}
 .tg{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit;font-size:.75rem;letter-spacing:.05em}
 .hero{text-align:center;padding:72px 0 40px}
 .hero small{color:var(--mute);letter-spacing:.3em;font-size:.72rem}
@@ -26,7 +26,14 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
 #cal.show{display:block}
 .months{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
 .m{flex:0 0 auto;border:1px solid transparent;background:var(--c);color:#111;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-size:.85rem;transition:.25s}
-.m:hover{transform:translateY(-2px)}
+.m{position:relative}.m:hover{transform:translateY(-2px)}
+.m.soon::after{content:"";position:absolute;top:3px;right:5px;width:8px;height:8px;border-radius:50%;background:#e11;animation:bl2 1s infinite}
+.ev{position:relative}
+.ev.soon::after{content:"";position:absolute;inset:-1px;border:2px solid #e11;border-radius:22px;animation:bl2 1s infinite;pointer-events:none}
+.bd{display:inline-block;margin-top:10px;font-style:normal;font-size:.72rem;background:#e11;color:#fff;border-radius:999px;padding:3px 10px}
+.clk{letter-spacing:0;font-weight:500;text-align:right;font-size:.75rem;line-height:1.35;margin-right:10px}
+.rt{display:flex;align-items:center;gap:6px}
+@keyframes bl2{50%{opacity:.15}}
 .m.on{border-color:var(--fg);box-shadow:0 0 0 2px var(--fg);font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:18px}
 .ev{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;cursor:pointer;opacity:0;transform:translateY(14px);animation:in .5s ease forwards;transition:border-color .2s,transform .2s}
@@ -47,7 +54,7 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
 </head>
 <body>
 <div class="wrap">
- <div class="top"><span>ZEEMPIX ENTERPRISE</span><button class="tg" id="tg">◐ Tema</button></div>
+ <div class="top"><span>ZEEMPIX ENTERPRISE</span><div class="rt"><span class="clk" id="clk"></span><button class="tg" id="tg">◐ Tema</button></div></div>
  <section class="hero">
   <small>ADMIN PANEL · MEDIA KETENTERAAN</small>
   <h1>Welcome to Zeempix Managements</h1>
@@ -67,7 +74,7 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
 </div>
 <script>
 // === Tukar link di sini ===
-const LINKS={socmed:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.0#heading=h.qu8kb5eivw1g",bmc:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.q71dennfmnb",paper:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.avg1cl29ix0#heading=h.est24vebip02"};
+const LINKS={socmed:"https://www.instagram.com/",bmc:"https://www.buymeacoffee.com/",paper:"https://drive.google.com/"};
 const MN=["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
 const T={A:"Angkatan Tentera Malaysia",P:"Polis Diraja Malaysia",G:"Agensi Awam & Keselamatan"};
 const E=[
@@ -85,18 +92,18 @@ const E=[
 [9,23,"Komando 69 (VAT 69)","P"],[10,7,"Kor Risik Diraja (KRD)","A"],
 [10,11,"Hari Penjara Malaysia","G"],[10,12,"Kor Polis Tentera Diraja (KPTD)","A"],
 [10,15,"Rejimen Semboyan Diraja (RSD)","A"],[11,5,"Pasukan Simpanan Persekutuan (FRU)","P"]];
-const $=id=>document.getElementById(id);let cur=new Date().getMonth(),tm;
+const $=id=>document.getElementById(id);let cur=new Date().getMonth(),tm,soon={};
 document.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>window.open(LINKS[b.dataset.k],"_blank","noopener"));
 $("bCal").onclick=()=>{$("cal").classList.toggle("show");if($("cal").classList.contains("show"))setTimeout(()=>$("cal").scrollIntoView({behavior:"smooth"}),50)};
 MN.forEach((n,i)=>{const b=document.createElement("button");b.className="m";b.textContent=n;b.style.setProperty("--c","hsl("+(i*30)+" 75% 85%)");b.onclick=()=>show(i);$("months").appendChild(b)});
 function show(m){
  cur=m;clearInterval(tm);$("det").classList.remove("show");
- [...$("months").children].forEach((b,i)=>b.classList.toggle("on",i===m));
+ [...$("months").children].forEach((b,i)=>{b.classList.toggle("on",i===m);b.classList.toggle("soon",Object.keys(soon).some(k=>+k.split("-")[0]===i))});
  const g=$("grid");g.innerHTML="";
  const ev=E.filter(e=>e[0]===m);
  if(!ev.length){g.innerHTML='<div class="empty">Tiada acara bulan ini.</div>';return}
  ev.forEach((e,i)=>{const c=document.createElement("div");c.className="ev";c.style.animationDelay=i*90+"ms";
-  c.innerHTML="<b>"+e[1]+" "+MN[m].slice(0,3)+"</b><span></span>";c.lastChild.textContent=e[2];
+  c.innerHTML="<b>"+e[1]+" "+MN[m].slice(0,3)+"</b><span></span>";c.lastChild.textContent=e[2];const n=soon[m+"-"+e[1]];if(n!==undefined){c.classList.add("soon");c.insertAdjacentHTML("beforeend","<i class=bd>"+(n?n+" hari lagi":"Hari ini")+"</i>")}
   c.onclick=()=>detail(e);g.appendChild(c)});
 }
 function detail(e){
@@ -107,6 +114,19 @@ function detail(e){
  const s=Math.ceil(txt.length/25);tm=setInterval(()=>{i+=s;t.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(tm)},20);
  setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"nearest"}),60);
 }
+// === Masa Malaysia (Kuala Lumpur) ===
+const KL=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"});
+const DN=["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];let dayKey="";
+function tick(){
+ const o={};KL.formatToParts(new Date()).forEach(p=>o[p.type]=p.value);
+ const t=Date.UTC(+o.year,o.month-1,+o.day),key=o.year+"-"+o.month+"-"+o.day;
+ $("clk").innerHTML=DN[new Date(t).getUTCDay()]+", "+o.day+" "+MN[o.month-1]+" "+o.year+"<br>"+o.hour+":"+o.minute+":"+o.second+" MYT";
+ if(key!==dayKey){
+  soon={};E.forEach(e=>{let d=Date.UTC(+o.year,e[0],e[1]);if(d<t)d=Date.UTC(+o.year+1,e[0],e[1]);const n=Math.round((d-t)/864e5);if(n<=7)soon[e[0]+"-"+e[1]]=n});
+  const first=!dayKey;dayKey=key;if(!first)show(cur);
+ }
+}
+tick();setInterval(tick,1000);
 show(cur);
 $("tg").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
 </script>
