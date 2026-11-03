@@ -50,9 +50,35 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
 @keyframes in{to{opacity:1;transform:none}from{opacity:0;transform:translateY(14px)}}
 @keyframes bl{50%{opacity:0}}
 .ft{text-align:center;color:var(--mute);font-size:.72rem;margin-top:60px;letter-spacing:.15em}
+/* === LOCK SCREEN === */
+#lock{position:fixed;inset:0;z-index:99999;background:#000;color:#f5f5f5;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#lock.hide{display:none}
+.lk{width:100%;max-width:360px;text-align:center;background:#111;border:1px solid #2a2a2a;border-radius:28px;padding:36px 28px}
+.lk small{color:#9a9a9a;letter-spacing:.3em;font-size:.68rem}
+.lk h2{margin:10px 0 24px;font-size:1.3rem;letter-spacing:.05em}
+.lk input{width:100%;background:#000;border:1px solid #2a2a2a;color:#fff;border-radius:16px;padding:14px 16px;font:inherit;outline:0;text-align:center;letter-spacing:.1em}
+.lk input:focus{border-color:#fff}
+.lk button{width:100%;margin-top:12px;background:#fff;color:#000;border:0;border-radius:16px;padding:14px;font:inherit;font-weight:600;cursor:pointer;transition:opacity .2s}
+.lk button:hover{opacity:.85}
+#lkErr{min-height:1.2em;margin-top:14px;color:#ff5a5a;font-size:.85rem}
+.lk.shake{animation:shk .35s}
+@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+body.locked #app{display:none}
+body.locked{overflow:hidden}
 </style>
 </head>
-<body>
+<body class="locked">
+<!-- LOCK SCREEN -->
+<div id="lock">
+ <div class="lk" id="lkBox">
+  <small>ZEEMPIX ENTERPRISE</small>
+  <h2>Akses Terhad</h2>
+  <input type="password" id="lkPw" placeholder="Masukkan kata laluan" autocomplete="off" autofocus>
+  <button id="lkBtn">Unlock</button>
+  <div id="lkErr"></div>
+ </div>
+</div>
+<div id="app">
 <div class="wrap">
  <div class="top"><span>ZEEMPIX ENTERPRISE</span><div class="rt"><span class="clk" id="clk"></span><button class="tg" id="tg">◐ Tema</button></div></div>
  <section class="hero">
@@ -72,9 +98,26 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
  </section>
  <div class="ft">© ZEEMPIX ENTERPRISE</div>
 </div>
+</div>
 <script>
+// === LOCK LOGIC (password disimpan sebagai hash sahaja) ===
+(function(){
+ const H=["dcbksizsmw","21vsve5vaj3"];
+ const hs=(s,seed=0)=>{let a=0xdeadbeef^seed,b=0x41c6ce57^seed;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
+ const ok=p=>H.includes(hs("zx:"+p+":mpix"));
+ const open=()=>{document.getElementById("lock").classList.add("hide");document.body.classList.remove("locked")};
+ try{if(sessionStorage.getItem("zpx")==="1")open()}catch(e){}
+ const pw=document.getElementById("lkPw"),err=document.getElementById("lkErr"),box=document.getElementById("lkBox");
+ function go(){
+  if(ok(pw.value.trim())){try{sessionStorage.setItem("zpx","1")}catch(e){}open()}
+  else{err.textContent="Kata laluan salah.";pw.value="";box.classList.remove("shake");void box.offsetWidth;box.classList.add("shake");pw.focus()}
+ }
+ document.getElementById("lkBtn").onclick=go;
+ pw.addEventListener("keydown",e=>{if(e.key==="Enter")go()});
+ pw.addEventListener("input",()=>err.textContent="");
+})();
 // === Tukar link di sini ===
-const LINKS={socmed:"https://www.instagram.com/",bmc:"https://www.buymeacoffee.com/",paper:"https://drive.google.com/"};
+const LINKS={socmed:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.0#heading=h.fgiufekve70r",bmc:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.q71dennfmnb#heading=h.qizo49cyem0c",paper:"https://docs.google.com/document/d/17cR4u1x_PAqHeQbW1blpdkC5Rc7NI_HTh8_0qQnXHXc/edit?tab=t.avg1cl29ix0#heading=h.est24vebip02"};
 const MN=["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
 const T={A:"Angkatan Tentera Malaysia",P:"Polis Diraja Malaysia",G:"Agensi Awam & Keselamatan"};
 const E=[
