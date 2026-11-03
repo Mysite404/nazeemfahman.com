@@ -121,7 +121,7 @@ body.locked{overflow:hidden}
 <script>
 // === LOCK LOGIC (password disimpan sebagai hash sahaja) ===
 (function(){
- const H=["dcbksizsmw","21vsve5vaj3"];
+ const H=["20vpewm57lj","h8hdyjkzmx"];
  const hs=(s,seed=0)=>{let a=0xdeadbeef^seed,b=0x41c6ce57^seed;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
  const ok=p=>H.includes(hs("zx:"+p+":mpix"));
  const open=()=>{document.getElementById("lock").classList.add("hide");document.body.classList.remove("locked");document.dispatchEvent(new Event("zpx-open"))};
@@ -217,5 +217,6 @@ document.addEventListener("zpx-open",()=>remind(false));
 if(!document.body.classList.contains("locked"))remind(false);
 $("tg").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4c3c53b8addf48ecb38294115f3ba3fd","r":1,"spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
