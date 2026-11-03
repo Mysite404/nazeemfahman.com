@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full‑Page iframe with ad‑block placeholder</title>
+    <style>
+        /* Reset margins and set full viewport */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* prevent scrollbars around iframe */
+            background-color: #0d0f12; /* subtle dark background for contrast */
+            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Main wrapper – takes full screen */
+        .viewer-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* The iframe fills the entire available space */
+        #fullpage-iframe {
+            flex: 1 1 auto;
+            width: 100%;
+            height: 100%;
+            border: none;           /* no border, looks seamless */
+            background-color: #ffffff; /* fallback while loading */
+            display: block;
+        }
+
+        /* ---- optional tiny overlay with ad-block toggle (cosmetic, doesn’t affect iframe) ---- */
+        .adblock-badge {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            z-index: 10000;
+            background: rgba(30, 30, 35, 0.85);
+            backdrop-filter: blur(4px);
+            color: #eaeef2;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 40px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;   /* lets clicks pass through to iframe */
+            user-select: none;
+        }
+
+        .adblock-badge .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #4caf50;
+        }
+
+        .adblock-badge .label {
+            letter-spacing: 0.3px;
+            opacity: 0.9;
+        }
+
+        /* subtle hint that it's a placeholder – no interaction */
+        .adblock-badge small {
+            font-size: 11px;
+            opacity: 0.7;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewer-container">
+        <!-- 
+            🔽 PLACEHOLDER: REPLACE THE src ATTRIBUTE BELOW WITH YOUR DESIRED URL 🔽
+            Example: src="https://example.com"
+            Leave as is to see a blank page (or use about:blank).
+        -->
+        <iframe 
+            id="fullpage-iframe"
+            src="about:blank" 
+            title="Full page viewer"
+            allow="clipboard-write; encrypted-media; fullscreen; geolocation; microphone; camera; midi; payment; usb; xr-spatial-tracking"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+
+        <!-- 
+            AD‑BLOCK PLACEHOLDER – purely visual indicator.
+            The actual ad‑blocking logic would be implemented via browser extension,
+            service worker, or proxy — not directly inside the iframe due to same‑origin policy.
+            This badge is just a placeholder to show where the UI could live.
+        -->
+        <div class="adblock-badge">
+            <span class="dot"></span>
+            <span class="label">Ad‑block active</span>
+            <small>(placeholder)</small>
+        </div>
+    </div>
+
+    <!-- 
+        ============================================================
+        AD‑BLOCK PLACEHOLDER – SCRIPT SECTION
+        ============================================================
+        Due to browser security (same‑origin policy), you cannot 
+        manipulate the content inside a cross‑origin iframe.
+        This means you cannot remove ads from the loaded page with 
+        JavaScript from this parent document.
+        
+        To actually block ads you would need:
+          1. A browser extension (content script) 
+          2. A service worker with a proxy (e.g., Cloudflare Workers)
+          3. A local proxy server that strips ads before serving
+          4. Or use a same‑origin page that you control.
+        
+        Below is a placeholder function / comment block for you 
+        to integrate your own ad‑block mechanism if needed.
+        ============================================================
+    -->
+    <script>
+        (function() {
+            // -------------------------------------------------------------
+            // 🛡️ AD‑BLOCK PLACEHOLDER (no actual blocking, just structure)
+            // -------------------------------------------------------------
+            // You can put your ad‑block logic here if you are serving 
+            // a same‑origin page or using a proxy.
+            // For cross‑origin iframes, the browser will block access.
+            
+            // Example placeholder: 
+            // - check if you have permission to access iframe content
+            // - remove elements with class 'ad' or id 'ad'
+            
+            const iframe = document.getElementById('fullpage-iframe');
+            
+            // This function would run if same‑origin were allowed.
+            // It is provided only as a template.
+            function attemptAdBlockPlaceholder() {
+                try {
+                    // ⚠️ This will throw for cross‑origin iframes – that's expected.
+                    const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (innerDoc) {
+                        console.log('[adblock placeholder] same‑origin access granted – you could remove ads here');
+                        // Example: remove elements with class 'ad' or 'advertisement'
+                        // innerDoc.querySelectorAll('.ad, .advertisement, [id*="ad-"]').forEach(el => el.remove());
+                    } else {
+                        console.log('[adblock placeholder] no inner document available (cross‑origin)');
+                    }
+                } catch (e) {
+                    // Expected for cross‑origin: SecurityError
+                    console.log('[adblock placeholder] cannot access iframe content due to same‑origin policy:', e.message);
+                }
+            }
+            
+            // When the iframe loads, try to run the placeholder (will fail silently for cross‑origin)
+            iframe.addEventListener('load', function() {
+                // Delay slightly to let any internal scripts run
+                setTimeout(attemptAdBlockPlaceholder, 200);
+            });
+            
+            // Expose a dummy object for future integration
+            window.__adBlockPlaceholder = {
+                version: '0.1',
+                note: 'Replace with real ad‑blocking logic (proxy/extension).',
+                isActive: true   // just for UI consistency
+            };
+            
+            // Update the badge based on the placeholder state (cosmetic only)
+            const badgeLabel = document.querySelector('.adblock-badge .label');
+            if (badgeLabel) {
+                badgeLabel.textContent = window.__adBlockPlaceholder.isActive 
+                    ? 'Ad‑block active' 
+                    : 'Ad‑block off';
+            }
+        })();
+    </script>
+</body>
+</html>
