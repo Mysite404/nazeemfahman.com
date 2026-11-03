@@ -71,6 +71,7 @@ body.locked{overflow:hidden}
 #rem b{display:block;margin-bottom:8px;font-size:.95rem}
 #remTxt{font-size:.88rem;line-height:1.55;white-space:pre-line}
 #remX{margin-top:12px;background:#fff;color:#000;border:0;border-radius:999px;padding:8px 18px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+.tg.need{border-color:#e11;animation:bl2 1.2s infinite}
 </style>
 
 <!-- KOD ONESIGNAL (DITAMBAH DI SINI) -->
@@ -205,13 +206,22 @@ function remind(force){
 }
 $("remX").onclick=()=>$("rem").classList.remove("show");
 
-// UBAHSUAI: Sambungkan butang loceng dengan OneSignal Prompt
+// === Butang loceng: minta kebenaran notifikasi (OneSignal) ===
+function nState(){return("Notification" in window)?Notification.permission:"unsupported"}
+function bellState(){$("bell").classList.toggle("need",nState()==="default")}
 $("bell").onclick=()=>{
-  window.OneSignalDeferred.push(function(OneSignal) {
-    OneSignal.Slidedown.promptPush();
-  });
-  remind(true);
+ const st=nState();
+ if(st==="unsupported"){toast(["Browser ini tak sokong notifikasi. Di iPhone: Share > Add to Home Screen, kemudian buka dari ikon itu."]);return}
+ if(st==="denied"){toast(["Notifikasi disekat. Buka Tetapan browser/app > Notifications > benarkan untuk website ini."]);return}
+ if(st==="granted"){remind(true);return}
+ window.OneSignalDeferred=window.OneSignalDeferred||[];
+ window.OneSignalDeferred.push(async function(OS){
+  try{await OS.Notifications.requestPermission()}catch(e){}
+  bellState();
+  toast([nState()==="granted"?"Notifikasi diaktifkan ✅":"Kebenaran tidak diberikan."]);
+ });
 };
+bellState();
 
 document.addEventListener("zpx-open",()=>remind(false));
 if(!document.body.classList.contains("locked"))remind(false);
