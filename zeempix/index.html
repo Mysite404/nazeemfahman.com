@@ -72,6 +72,18 @@ body.locked{overflow:hidden}
 #remTxt{font-size:.88rem;line-height:1.55;white-space:pre-line}
 #remX{margin-top:12px;background:#fff;color:#000;border:0;border-radius:999px;padding:8px 18px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
 </style>
+
+<!-- KOD ONESIGNAL (DITAMBAH DI SINI) -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "95a9f3dd-e1ff-44bb-ae97-fb95f5a4ac6f",
+    });
+  });
+</script>
+
 </head>
 <body class="locked">
 <!-- LOCK SCREEN -->
@@ -192,7 +204,15 @@ function remind(force){
  toast(l);sysNotify(l);
 }
 $("remX").onclick=()=>$("rem").classList.remove("show");
-$("bell").onclick=()=>{if("Notification" in window&&Notification.permission==="default"){Notification.requestPermission().then(()=>remind(true)).catch(()=>remind(true))}else remind(true)};
+
+// UBAHSUAI: Sambungkan butang loceng dengan OneSignal Prompt
+$("bell").onclick=()=>{
+  window.OneSignalDeferred.push(function(OneSignal) {
+    OneSignal.Slidedown.promptPush();
+  });
+  remind(true);
+};
+
 document.addEventListener("zpx-open",()=>remind(false));
 if(!document.body.classList.contains("locked"))remind(false);
 $("tg").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
