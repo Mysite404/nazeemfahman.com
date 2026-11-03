@@ -65,6 +65,12 @@ h1{font-size:clamp(2rem,6vw,3.4rem);margin:14px 0 10px;line-height:1.1;letter-sp
 @keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 body.locked #app{display:none}
 body.locked{overflow:hidden}
+/* === REMINDER === */
+#rem{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-160%);width:min(92vw,420px);z-index:9000;background:#111;color:#f5f5f5;border:1px solid #e11;border-radius:22px;padding:16px 18px;box-shadow:0 10px 40px rgba(0,0,0,.4);transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+#rem.show{transform:translate(-50%,0)}
+#rem b{display:block;margin-bottom:8px;font-size:.95rem}
+#remTxt{font-size:.88rem;line-height:1.55;white-space:pre-line}
+#remX{margin-top:12px;background:#fff;color:#000;border:0;border-radius:999px;padding:8px 18px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
 </style>
 </head>
 <body class="locked">
@@ -80,7 +86,7 @@ body.locked{overflow:hidden}
 </div>
 <div id="app">
 <div class="wrap">
- <div class="top"><span>ZEEMPIX ENTERPRISE</span><div class="rt"><span class="clk" id="clk"></span><button class="tg" id="tg">◐ Tema</button></div></div>
+ <div class="top"><span>ZEEMPIX ENTERPRISE</span><div class="rt"><span class="clk" id="clk"></span><button class="tg" id="bell" title="Peringatan event">🔔</button><button class="tg" id="tg">◐ Tema</button></div></div>
  <section class="hero">
   <small>ADMIN PANEL · MEDIA KETENTERAAN</small>
   <h1>Welcome to Zeempix Managements</h1>
@@ -99,13 +105,14 @@ body.locked{overflow:hidden}
  <div class="ft">© ZEEMPIX ENTERPRISE</div>
 </div>
 </div>
+<div id="rem"><b>🔔 Peringatan: Event Hampir Tiba</b><div id="remTxt"></div><button id="remX">OK, faham</button></div>
 <script>
 // === LOCK LOGIC (password disimpan sebagai hash sahaja) ===
 (function(){
  const H=["dcbksizsmw","21vsve5vaj3"];
  const hs=(s,seed=0)=>{let a=0xdeadbeef^seed,b=0x41c6ce57^seed;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
  const ok=p=>H.includes(hs("zx:"+p+":mpix"));
- const open=()=>{document.getElementById("lock").classList.add("hide");document.body.classList.remove("locked")};
+ const open=()=>{document.getElementById("lock").classList.add("hide");document.body.classList.remove("locked");document.dispatchEvent(new Event("zpx-open"))};
  try{if(sessionStorage.getItem("zpx")==="1")open()}catch(e){}
  const pw=document.getElementById("lkPw"),err=document.getElementById("lkErr"),box=document.getElementById("lkBox");
  function go(){
@@ -171,6 +178,23 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 show(cur);
+// === Peringatan setiap 24 jam ===
+const RK="zpx_rem";
+function remList(){return Object.keys(soon).map(k=>{const a=k.split("-");return{m:+a[0],d:+a[1],n:soon[k]}}).sort((x,y)=>x.n-y.n).map(x=>{const e=E.find(v=>v[0]===x.m&&v[1]===x.d);return"• "+e[2]+" — "+(x.n?x.n+" hari lagi":"HARI INI")+" ("+x.d+" "+MN[x.m].slice(0,3)+")"})}
+function toast(l){$("remTxt").textContent=l.join("\n");$("rem").classList.add("show")}
+function sysNotify(l){try{if("Notification" in window&&Notification.permission==="granted")new Notification("ZEEMPIX: Event Hampir Tiba",{body:l.join("\n"),tag:"zpx"})}catch(e){}}
+function remind(force){
+ const l=remList();
+ if(!l.length){if(force)toast(["Tiada event dalam 7 hari akan datang."]);return}
+ let last=0;try{last=+localStorage.getItem(RK)||0}catch(e){}
+ if(!force&&Date.now()-last<864e5)return;
+ try{localStorage.setItem(RK,String(Date.now()))}catch(e){}
+ toast(l);sysNotify(l);
+}
+$("remX").onclick=()=>$("rem").classList.remove("show");
+$("bell").onclick=()=>{if("Notification" in window&&Notification.permission==="default"){Notification.requestPermission().then(()=>remind(true)).catch(()=>remind(true))}else remind(true)};
+document.addEventListener("zpx-open",()=>remind(false));
+if(!document.body.classList.contains("locked"))remind(false);
 $("tg").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
 </script>
 </body>
